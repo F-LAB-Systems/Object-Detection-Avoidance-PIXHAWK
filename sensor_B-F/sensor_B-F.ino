@@ -6,16 +6,16 @@
 
 //======================= GPIO pins intialization =========================//
 SoftwareSerial mySerial(10, 11); /// RX, TX
-NewPing sonar_F(3, 3, MAX_DISTANCE);
-NewPing sonar_B(4, 4, MAX_DISTANCE);
+NewPing sonar_B(3, 3, MAX_DISTANCE);
+NewPing sonar_F(4, 4, MAX_DISTANCE);
 
 
 //======================= Intitialize variables =========================//
 unsigned long HeartbeatTime = 0;
 int OUTPUT_PITCH = 0;
 int TRIG_PITCH = 0;
-int PITCH_F = 0;
-int PITCH_B = 0;
+int FRONT_SENSOR = 0;
+int BACK_SENSOR = 0;
 int PITCH_BACK = 0;
 int PITCH_FRONT = 0;
 
@@ -32,8 +32,8 @@ void loop() {
     PIX_HEART_BEAT();
   } 
   TRIG_PITCH = sonar_F.ping_cm() + sonar_B.ping_cm(); // Checks the overall Pitch to confirm if obstacle is detetcted at either side of the drone !
-  PITCH_F = sonar_F.ping_cm(); //distance in cm // Gets's the distance from front facing sensor 
-  PITCH_B = sonar_B.ping_cm(); //distance in cm // Gets's the distance from back facing sensor 
+  FRONT_SENSOR = sonar_F.ping_cm(); //distance in cm // Gets's the distance from front facing sensor 
+  BACK_SENSOR = sonar_B.ping_cm(); //distance in cm // Gets's the distance from back facing sensor 
   OUTPUT_DATA();
 }
 
@@ -50,7 +50,7 @@ void OUTPUT_DATA() {
 
 // Since we can't pass the values that we get from the sensors directly
 // I have devised this formula to calculate the PITCH-BACK and FRONT accordingly
-// The idea is, when an object is detected the distance is sent function CALCULATE_PITCH(), which does the calculation of increasing the pitch values and decreasing it as values inputted from sensor.
+// The idea is, when an object is detected the distance is sent to function CALCULATE_PITCH(), which does the calculation of increasing the pitch values and decreasing it as values inputted from sensor.
 
 
 
@@ -59,19 +59,21 @@ void OUTPUT_DATA() {
 //======================= Calculation for PITCH =========================//
 void CALCULATE_PITCH(){
 // Checks if sensor value is less than 70cm and is not equal to Zero.
-    if (PITCH_F !=0 && PITCH_F<70) {
-       PITCH_FRONT = 1500-30-((70-PITCH_F)*6); // 1500 = Mid Term, 30 = intital increment when object detetcted at 69cm, 70 = MAX_DISTANCE, PITCH_F = Distance calculated by the sensor. 
+    if (BACK_SENSOR != 0 && BACK_SENSOR < MAX_DISTANCE) {
+       PITCH_FRONT = 1500-30-((70-BACK_SENSOR)*6); // 1500 = Mid Term, 30 = intital increment when object detetcted at 69cm, 70 = MAX_DISTANCE, PITCH_F = Distance calculated by the sensor, 6 = increment value by mutiple of 6  
        OUTPUT_PITCH = PITCH_FRONT;
 //       Serial.print(PITCH_FRONT);
 //       Serial.println("cm");
     }
-    else if (PITCH_B !=0 && PITCH_B<70){
-       PITCH_BACK = 1500+30+((70-PITCH_B)*6);
+    else if (FRONT_SENSOR != 0 && FRONT_SENSOR < MAX_DISTANCE){
+       PITCH_BACK = 1500+30+((70-FRONT_SENSOR)*6);
        OUTPUT_PITCH = PITCH_BACK;
 //       Serial.print(PITCH_BACK);
 //       Serial.println("cm");
     }
-
+    else {
+      OUTPUT_PITCH = 1500;
+    }
 }
 
 
@@ -89,7 +91,7 @@ void PIX_HEART_BEAT() {
 
 void SEND_DATA(int P) {
 
-    if (TRIG_PITCH !=0){
+    if (TRIG_PITCH != 0){
     mavlink_msg_rc_channels_override_pack(255, 0 , &msg, 1, 0, 0, P, 0, 0, 0, 0, 0, 0);    // CHANNEL = 1(ROLL), 2(PITCH), 3(Throttle), 4(Yaw) , 5, 6, 7, 8
     len = mavlink_msg_to_send_buffer(buf, &msg);
     }
