@@ -10,7 +10,7 @@ Please download the Mavlink library provided in my repository and change the pat
 
 PITCH CALCULATION
 
-----EXAMPLE 1----
+----EXAMPLE 1.1----
 
 Assume...
 
@@ -26,8 +26,24 @@ PITCH_BACK = 1500+210;
 PITCH_BACK = 1710; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 40cm
 
 
+----EXAMPLE 1.2----
 
-----EXAMPLE 2----
+Assume...
+
+Distance from Obstacle (FRONT_SENSOR) = 20cm } Drone must move back to avoid the obstacle
+
+EQUATION ...
+
+PITCH_BACK = 1500+30+((70-FRONT_SENSOR)*6);
+PITCH_BACK = 1500+30+((70-20)*6);
+PITCH_BACK = 1500+30+((50)*6);
+PITCH_BACK = 1500+30+(300);
+PITCH_BACK = 1500+330;
+PITCH_BACK = 1830; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 20cm
+
+
+
+----EXAMPLE 2.1----
 
 Assume...
 
@@ -35,9 +51,26 @@ Distance from Obstacle (BACK_SENSOR) = 60cm } Drone must move back to avoid the 
 
 EQUATION ...
 
-PITCH_BACK = 1500+30+((70-FRONT_SENSOR)*6);
-PITCH_BACK = 1500+30+((70-60)*6);
-PITCH_BACK = 1500+30+((10)*6);
-PITCH_BACK = 1500+30+(60);
-PITCH_BACK = 1500+90;
-PITCH_BACK = 1590; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 40cm
+PITCH_FRONT = 1500-30-((70-BACK_SENSOR)*6);
+PITCH_FRONT = 1500-30-((70-60)*6);
+PITCH_FRONT = 1500-30-((10)*6);
+PITCH_FRONT = 1500-30-(60);
+PITCH_FRONT = 1470-60;
+PITCH_FRONT = 1410; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 60cm
+
+
+
+----EXAMPLE 2.2----
+
+Assume...
+
+Distance from Obstacle (BACK_SENSOR) = 20cm } Drone must move back to avoid the obstacle
+
+EQUATION ...
+
+PITCH_FRONT = 1500-30-((70-BACK_SENSOR)*6);
+PITCH_FRONT = 1500-30-((70-20)*6);
+PITCH_FRONT = 1500-30-((50)*6);
+PITCH_FRONT = 1500-30-(300);
+PITCH_FRONT = 1470-300;
+PITCH_FRONT = 1170; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 60cm
