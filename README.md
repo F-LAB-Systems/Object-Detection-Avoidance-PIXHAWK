@@ -3,11 +3,6 @@ This will set you up on how to integrate cheap HC-SR04 ultrasonic sensor and ard
 Currently the code supports only the PITCH movement(FRONT - BACK) and can be added with ROLL (LEFT - RIGHT) movement aswell.
 
 
-# NOTE
-Please download the Mavlink library provided in my repository and change the path to the mavlink.h as per your systems path to Arduino's library
-
-
-
 PITCH CALCULATION
 
 ----EXAMPLE 1.1----
