@@ -42,7 +42,7 @@ PITCH_BACK = 1830; // This is the Pitch value that must be sent to the pixhawk w
 
 Assume...
 
-Distance from Obstacle (BACK_SENSOR) = 60cm } Drone must move back to avoid the obstacle
+Distance from Obstacle (BACK_SENSOR) = 60cm } Drone must move forward to avoid the obstacle
 
 EQUATION ...
 
@@ -59,7 +59,7 @@ PITCH_FRONT = 1410; // This is the Pitch value that must be sent to the pixhawk 
 
 Assume...
 
-Distance from Obstacle (BACK_SENSOR) = 20cm } Drone must move back to avoid the obstacle
+Distance from Obstacle (BACK_SENSOR) = 20cm } Drone must move forward to avoid the obstacle
 
 EQUATION ...
 
@@ -68,4 +68,4 @@ PITCH_FRONT = 1500-30-((70-20)*6);
 PITCH_FRONT = 1500-30-((50)*6);
 PITCH_FRONT = 1500-30-(300);
 PITCH_FRONT = 1470-300;
-PITCH_FRONT = 1170; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 60cm
+PITCH_FRONT = 1170; // This is the Pitch value that must be sent to the pixhawk when an object is detected at 20cm
